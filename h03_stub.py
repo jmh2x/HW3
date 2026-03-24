@@ -167,8 +167,7 @@ if __name__ == "__main__":
 
     # Find zero pixels in the training dataset
     mnist_zero_pixels = find_zero_pixels(train_dataset_raw)
-    print(f"Number of zero pixels in all training images:
-    {np.sum(mnist_zero_pixels)}")
+    print(f"Number of zero pixels in all training images: {np.sum(mnist_zero_pixels)}")
 
     # Train the model and get W and b
     print("Training the model...")
@@ -199,10 +198,8 @@ if __name__ == "__main__":
     print(num_zeros_ovelap, num_zeros_Wonly, num_zeros_total)
 
     # Plot binary pattern
-    plot_binary_pattern(mnist_zero_pixels,title="0-in-all-imgs/non0-in-at-least-
-    one-img, over 50k training imgs")
-    plot_binary_pattern(W_zero_pixels,title="0-in-all-10-classes/non0-in-at-least-
-    one-class, over trained W")
+    plot_binary_pattern(mnist_zero_pixels,title="0-in-all-imgs/non0-in-at-least one-img, over 50k training imgs")
+    plot_binary_pattern(W_zero_pixels,title="0-in-all-10-classes/non0-in-at-least-one-class, over trained W")
 
     # Plot weight images
     plot_weight_images(W)
