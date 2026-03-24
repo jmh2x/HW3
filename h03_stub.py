@@ -17,55 +17,55 @@ import numpy as np
 
 def my_train(train_dataset, test_dataset = None):
 
-    batch_size = 128
-    learning_rate = 0.1
-    num_epochs = 5
+    batch_size = 128 #batch size for training
+    learning_rate = 0.1 #learning rate for SGD
+    num_epochs = 5 #number of epochs to train
 
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
-    model = nn.Linear(28 * 28, 10)
+    model = nn.Linear(28 * 28, 10) #10 classes, input is 28*28 pixels
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=learning_rate)
+    optimizer = optim.SGD(model.parameters(), lr=learning_rate) 
 
-    model.train()
-    for epoch in range(num_epochs):
-        for data, target in train_loader:
-            data = data.view(-1, 28 * 28)
+    model.train() #set model to training mode
+    for epoch in range(num_epochs): #loop over epochs
+        for data, target in train_loader: #loop over batches
+            data = data.view(-1, 28 * 28) #flatten images to vectors
 
-            optimizer.zero_grad()
-            logits = model(data)
-            loss = criterion(logits, target)
-            loss.backward()
-            optimizer.step()
+            optimizer.zero_grad() #zero gradients
+            logits = model(data) #forward pass
+            loss = criterion(logits, target) #compute loss
+            loss.backward() #backpropagate
+            optimizer.step() #update weights
 
     with torch.no_grad():
-        W = model.weight.detach().cpu().numpy()
-        b = model.bias.detach().cpu().numpy()
+        W = model.weight.detach().cpu().numpy() #convert weights to numpy
+        b = model.bias.detach().cpu().numpy() #convert bias to numpy
 
-    return W, b
+    return W, b #return the trained weights and bias as numpy arrays
 
 
 def my_test(W,b,test_dataset):
 
-    W_t = torch.from_numpy(W).float()
-    b_t = torch.from_numpy(b).float()
+    W_t = torch.from_numpy(W).float() #convert W to torch tensor
+    b_t = torch.from_numpy(b).float() #convert b to torch tensor
 
-    test_loader = DataLoader(test_dataset, batch_size=1000, shuffle=False)
+    test_loader = DataLoader(test_dataset, batch_size=1000, shuffle=False) #create test loader
 
-    total = 0
+    total = 0 
     incorrect = 0
 
-    for data, target in test_loader:
-        data = data.view(-1, 28 * 28)
+    for data, target in test_loader: #loop over test batches
+        data = data.view(-1, 28 * 28) #flatten images to vectors
 
-        logits = data @ W_t.t() + b_t
-        preds = torch.argmax(logits, dim=1)
+        logits = data @ W_t.t() + b_t 
+        preds = torch.argmax(logits, dim=1) 
 
-        total += target.size(0)
-        incorrect += (preds != target).sum().item()
+        total += target.size(0) #count total samples
+        incorrect += (preds != target).sum().item() #count incorrect predictions
 
-    test_error_rate = incorrect / total
-    return test_error_rate
+    test_error_rate = incorrect / total #compute error rate
+    return test_error_rate #return error rate
 
 
 if __name__ == "__main__":
